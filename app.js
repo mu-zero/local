@@ -1,7 +1,7 @@
 var DirecTV = require('directv-remote');
 var groveSensor = require('jsupm_grove');
 var request = require('request');
-var socket = require('socket.io-client')('http://mzserver.mybluemix.net');
+var socket = require('socket.io-client')('http://mzserver.mybluemix.net:8081');
 var connect = require('connect');
 var serveStatic = require('serve-static');
 
