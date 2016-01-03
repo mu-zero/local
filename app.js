@@ -22,20 +22,26 @@ var tookmeds = 0;
 // waiting one second between readings
 function readLightSensorValue() {
     if(light.value() < 3) sitting = 1;
-    else sitting = 0;   
+    else sitting = 0;  
+    cabinet();
+    console.log('meds? '+tookmeds); 
 }
 
-request('https://graph.api.smartthings.com/api/smartapps/installations/5c4c9922-153e-4eb2-a0c0-18677fbb7faf/contactSensors/7a8bc500-422d-4dd3-a8d4-82bfc5a965d4',
+function cabinet() {
+    request('https://graph.api.smartthings.com/api/smartapps/installations/5c4c9922-153e-4eb2-a0c0-18677fbb7faf/contactSensors/7a8bc500-422d-4dd3-a8d4-82bfc5a965d4',
  function (error, response, body) {
      if (!error && response.statusCode == 200) {
-    console.log(body) ;
+        var obj = JSON.parse(body);
+        if(obj.contact == 'open') {
+            tookmeds = 1;
+        }  
   }
  }).auth(null, null, true, '0373663b-9c6c-4f7e-af8a-8658cdbc352e');
+}
 
 
 
-
-setInterval(readLightSensorValue, 500);
+setInterval(readLightSensorValue, 2000);
 
   //socket.on('connect', function(){console.log('connected')});
   //socket.on('cloud', function(data){
