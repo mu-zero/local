@@ -24,8 +24,8 @@ var couchtimer = null;
 // Read the input and print both the raw value and a rough lux value,
 // waiting one second between readings
 function readLightSensorValue() {
-    if(light.value() < 3) Remote.processKey('pause');
-    else sitting = 0;  
+    if(light.value() < 3) sitting =1;
+    else  Remote.processKey('pause');
 }
 
 function cabinet() {
@@ -63,7 +63,7 @@ function defaultMedia(person) {
 
 connect().use(serveStatic(__dirname)).listen(8080);
 
-setInterval(readLightSensorValue, 2000);
+setInterval(readLightSensorValue, 500);
 setInterval(cabinet, 3000);
 Remote.webStart('http://10.10.30.40:8080/meds.html');  
 
