@@ -24,7 +24,7 @@ var couchtimer = null;
 // Read the input and print both the raw value and a rough lux value,
 // waiting one second between readings
 function readLightSensorValue() {
-    if(light.value() < 3) sitting = 1;
+    if(light.value() < 3) Remote.processKey('pause');
     else sitting = 0;  
 }
 
@@ -35,6 +35,7 @@ function cabinet() {
         var obj = JSON.parse(body);
         if(obj.contact == 'open') {
             tookmeds = 1;
+            Remote.play('1');
         }  
   }
  }).auth(null, null, true, '0373663b-9c6c-4f7e-af8a-8658cdbc352e');
@@ -59,18 +60,19 @@ function defaultMedia(person) {
 
 
 setInterval(readLightSensorValue, 2000);
+setInterval(cabinet, 2000);
 
-  socket.on('connect', function(){console.log('connected')});
-  socket.on('presence', function(data){
-      var presence = JSON.parse(data);
-      couchtimer = setInterval(defaultMedia(presence.person),500);
-  });
-  socket.on('phone', function(data){
-     if(sitting == 1) Remote.processKey('pause');
-  });
-  socket.on('speech', function(){
-      Remote.play('1');
-  });
+  //socket.on('connect', function(){console.log('connected')});
+  //socket.on('presence', function(data){
+    //  var presence = JSON.parse(data);
+      //couchtimer = setInterval(defaultMedia(presence.person),500);
+  //});
+  //socket.on('phone', function(data){
+    // if(sitting == 1) Remote.processKey('pause');
+  //});
+  //socket.on('speech', function(){
+    //  Remote.play('1');
+  //});
   
   connect().use(serveStatic(__dirname)).listen(8080);
   
