@@ -28,7 +28,7 @@ function readLightSensorValue() {
 request('https://graph.api.smartthings.com/api/smartapps/installations/5c4c9922-153e-4eb2-a0c0-18677fbb7faf/contactSensors/7a8bc500-422d-4dd3-a8d4-82bfc5a965d4',
  function (error, response, body) {
      if (!error && response.statusCode == 200) {
-    console.log(body) // Show the HTML for the Google homepage.
+    console.log(body) ;
   }
  }).auth(null, null, true, '0373663b-9c6c-4f7e-af8a-8658cdbc352e');
 
