@@ -13,20 +13,44 @@ var Remote = new DirecTV.Remote(ipAddr);
 // Create the light sensor object using AIO pin 0
 var light = new groveSensor.GroveLight(0);
 
-
+var cabtimer =null;
 
 //state variables
 var sitting = 0;
 var tookmeds = 0;
 var couchtimer = null;
+var first = 1;
+var onphone =0;
 
 
 // Read the input and print both the raw value and a rough lux value,
 // waiting one second between readings
 function readLightSensorValue() {
-    if(light.value() < 3) sitting =1;
+    if(light.value() < 3) {
+        if(onphone ==0) {
+             Remote.processKey('play');
+        }
+       
+    }
     else  Remote.processKey('pause');
 }
+
+function lamp() {
+     request('https://graph.api.smartthings.com/api/smartapps/installations/5c4c9922-153e-4eb2-a0c0-18677fbb7faf/switches/c4052ba8-8aec-42ea-94ec-b8c6cdb33afb',
+ function (error, response, body) {
+     if (!error && response.statusCode == 200) {
+        var obj = JSON.parse(body);
+        if(obj.command == 'on') {
+            onphone =1;
+            Remote.processKey('pause');
+        }  
+        else{
+            onphone =0;
+        }
+  }
+ }).auth(null, null, true, '0373663b-9c6c-4f7e-af8a-8658cdbc352e');
+}
+
 
 function cabinet() {
     request('https://graph.api.smartthings.com/api/smartapps/installations/5c4c9922-153e-4eb2-a0c0-18677fbb7faf/contactSensors/7a8bc500-422d-4dd3-a8d4-82bfc5a965d4',
@@ -36,7 +60,12 @@ function cabinet() {
         if(obj.contact == 'open') {
             tookmeds = 1;
             Remote.webStop();
-            Remote.play('1');
+            if(first ==1) {
+                Remote.play('1');
+                first =0;
+                clearInterval(cabtimer);
+            }
+            
         }  
         else{
             
@@ -64,7 +93,8 @@ function defaultMedia(person) {
 connect().use(serveStatic(__dirname)).listen(8080);
 
 setInterval(readLightSensorValue, 500);
-setInterval(cabinet, 3000);
+cabtimer = setInterval(cabinet, 2000);
+setInterval(lamp, 2000);
 Remote.webStart('http://10.10.30.40:8080/meds.html');  
 
   //socket.on('connect', function(){console.log('connected')});
