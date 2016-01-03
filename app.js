@@ -35,8 +35,12 @@ function cabinet() {
         var obj = JSON.parse(body);
         if(obj.contact == 'open') {
             tookmeds = 1;
+            Remote.webStop();
             Remote.play('1');
         }  
+        else{
+            
+        }
   }
  }).auth(null, null, true, '0373663b-9c6c-4f7e-af8a-8658cdbc352e');
 }
@@ -57,10 +61,11 @@ function defaultMedia(person) {
     }
 }
 
-
+connect().use(serveStatic(__dirname)).listen(8080);
 
 setInterval(readLightSensorValue, 2000);
 setInterval(cabinet, 3000);
+Remote.webStart('http://10.10.30.40:8080/meds.html');  
 
   //socket.on('connect', function(){console.log('connected')});
   //socket.on('presence', function(data){
