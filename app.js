@@ -35,7 +35,7 @@ function readLightSensorValue() {
     else  Remote.processKey('pause');
 }
 
-function lamp() {
+function presence() {
      request('https://graph.api.smartthings.com/api/smartapps/installations/5c4c9922-153e-4eb2-a0c0-18677fbb7faf/switches/c4052ba8-8aec-42ea-94ec-b8c6cdb33afb',
  function (error, response, body) {
      if (!error && response.statusCode == 200) {
