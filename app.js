@@ -1,7 +1,7 @@
 var DirecTV = require('directv-remote');
 var groveSensor = require('jsupm_grove');
 var request = require('request');
-//var socket = require('socket.io-client')('http://localhost');
+var socket = require('socket.io-client')('http://localhost');
 
 
 var ipAddr = '10.10.30.245';
@@ -17,14 +17,14 @@ var light = new groveSensor.GroveLight(0);
 //state variables
 var sitting = 0;
 var tookmeds = 0;
+var couchtimer = null;
+
 
 // Read the input and print both the raw value and a rough lux value,
 // waiting one second between readings
 function readLightSensorValue() {
     if(light.value() < 3) sitting = 1;
     else sitting = 0;  
-    cabinet();
-    console.log('meds? '+tookmeds); 
 }
 
 function cabinet() {
@@ -39,14 +39,37 @@ function cabinet() {
  }).auth(null, null, true, '0373663b-9c6c-4f7e-af8a-8658cdbc352e');
 }
 
+function defaultMedia(person) {
+    if(sitting == 1) {
+         if(person=='jack') {
+           if(tookmeds ==1) {
+               Remote.webStop();   
+               Remote.tune('206');
+           }
+           else Remote.webstart ('urltoostaticpage');            
+         }
+         else{
+             Remote.play('10');
+         }
+         clearInterval(couchtimer);
+    }
+}
+
 
 
 setInterval(readLightSensorValue, 2000);
 
-  //socket.on('connect', function(){console.log('connected')});
-  //socket.on('cloud', function(data){
-  //    data.
-  //});
+  socket.on('connect', function(){console.log('connected')});
+  socket.on('presence', function(data){
+      var presence = JSON.parse(data);
+      couchtimer = setInterval(defaultMedia(presence.person),500);
+  });
+  socket.on('phone', function(data){
+     if(sitting == 1) Remote.processKey('pause');
+  });
+  socket.on('speech', function(){
+      Remote.play('1');
+  });
   //socket.on('disconnect', function(){});
 
 
