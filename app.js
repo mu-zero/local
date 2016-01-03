@@ -11,7 +11,7 @@ var ipAddr = '10.10.30.245';
 //DirecTV remote
 var Remote = new DirecTV.Remote(ipAddr);
 //socket
-var socket = io.connect('http://mzserver.mybluemix.net:1337');
+var socket = io.connect('http://mzserver.mybluemix.net:3000');
 
 // Create the light sensor object using AIO pin 0
 var light = new groveSensor.GroveLight(0);
