@@ -1,14 +1,17 @@
 var DirecTV = require('directv-remote');
 var groveSensor = require('jsupm_grove');
 var request = require('request');
-var socket = require('socket.io-client')('http://mzserver.mybluemix.net:8081');
+var io = require('socket.io-client');
 var connect = require('connect');
 var serveStatic = require('serve-static');
+
 
 var ipAddr = '10.10.30.245';
 
 //DirecTV remote
 var Remote = new DirecTV.Remote(ipAddr);
+//socket
+var socket = io.connect('http://mzserver.mybluemix.net:8081');
 
 // Create the light sensor object using AIO pin 0
 var light = new groveSensor.GroveLight(0);
