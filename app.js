@@ -1,7 +1,7 @@
 var DirecTV = require('directv-remote');
 var groveSensor = require('jsupm_grove');
 var request = require('request');
-var socket = require('socket.io-client')('http://localhost');
+//var socket = require('socket.io-client')('http://localhost');
 var connect = require('connect');
 var serveStatic = require('serve-static');
 
@@ -60,7 +60,7 @@ function defaultMedia(person) {
 
 
 setInterval(readLightSensorValue, 2000);
-setInterval(cabinet, 2000);
+setInterval(cabinet, 3000);
 
   //socket.on('connect', function(){console.log('connected')});
   //socket.on('presence', function(data){
@@ -74,7 +74,7 @@ setInterval(cabinet, 2000);
     //  Remote.play('1');
   //});
   
-  connect().use(serveStatic(__dirname)).listen(8080);
+ // connect().use(serveStatic(__dirname)).listen(8080);
   
   
   //socket.on('disconnect', function(){});
