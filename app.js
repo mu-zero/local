@@ -2,7 +2,8 @@ var DirecTV = require('directv-remote');
 var groveSensor = require('jsupm_grove');
 var request = require('request');
 var socket = require('socket.io-client')('http://localhost');
-
+var connect = require('connect');
+var serveStatic = require('serve-static');
 
 var ipAddr = '10.10.30.245';
 
@@ -46,7 +47,7 @@ function defaultMedia(person) {
                Remote.webStop();   
                Remote.tune('206');
            }
-           else Remote.webstart ('urltoostaticpage');            
+           else Remote.webStart ('urltoostaticpage');            
          }
          else{
              Remote.play('10');
@@ -70,6 +71,10 @@ setInterval(readLightSensorValue, 2000);
   socket.on('speech', function(){
       Remote.play('1');
   });
+  
+  connect().use(serveStatic(__dirname)).listen(8080);
+  
+  
   //socket.on('disconnect', function(){});
 
 
