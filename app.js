@@ -3,8 +3,6 @@ var groveSensor = require('jsupm_grove');
 var request = require('request');
 //var socket = require('socket.io-client')('http://localhost');
 
-var Client = require('node-rest-client').Client;
-
 
 var ipAddr = '10.10.30.245';
 
